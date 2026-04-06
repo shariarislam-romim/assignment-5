@@ -1,31 +1,44 @@
 let allIssues = [];
 
+const cardContainer = document.getElementById("cardContainer");
+
+
+const totalCount = document.getElementById("totalCount");
+
+
+const assignee = document.getElementById("assignee");
+const priority = document.getElementById("priority");
+const author = document.getElementById("author");
+const date = document.getElementById("date");
+const searchBtn = document.getElementById("searchBtn");
+
+
 const createElements = (arr) => {
   const htmlElements = arr.map((el) => {
     const style =
       el === "bug"
         ? {
             color: "bg-[#FEECEC] border-[#FECACA] text-[#EF4444]",
-            icon: "assets/BugDroid.png",
+            icon: "./assets/BugDroid.png",
           }
         : el === "help wanted"
           ? {
               color: "bg-[#FFF8DB] border-[#FDE68A] text-[#D97706]",
-              icon: "assets/Lifebuoy.png",
+              icon: "./assets/Lifebuoy.png",
             }
           : el === "enhancement"
             ? {
                 color: "bg-[#DEFCE8] border-[#BBF7D0] text-[#00A96E]",
-                icon: "assets/Sparkle.png",
+                icon: "./assets/Sparkle.png",
               }
             : el === "good first issue"
               ? {
                   color: "bg-[#b1faca] border-[#8bb59a] text-[#25a14e]",
-                  icon: "assets/Sparkle.png",
+                  icon: "./assets/Sparkle.png",
                 }
               : {
                   color: "bg-[#c3f6f7] border-[#71bebf] text-[#0e9496]",
-                  icon: "assets/document.svg",
+                  icon: "./assets/document.svg",
                 };
     return `<div
                 class="${style.color} h-6 text-center flex rounded-2xl border "
@@ -41,6 +54,9 @@ const createElements = (arr) => {
 };
 
 const manageSpinner = (status) => {
+   
+    
+
   if (status == true) {
     document.getElementById("spinner").classList.remove("hidden");
     document.getElementById("cardContainer").classList.add("hidden");
@@ -59,10 +75,15 @@ async function loadIssues() {
   allIssues = data.data;
   displayIssues(allIssues);
   displayCount(allIssues);
-}
+};
+
+// filter button
+const allBtn = document.getElementById("allBtn");
+const openBtn = document.getElementById("openBtn");
+const closedBtn = document.getElementById("closedBtn");
+const btns = document.querySelectorAll("#btnDiv button");
 
 const setActive = (btn) => {
-const btns = document.querySelectorAll("#btnDiv button");   
   btns.forEach((btn) => {
     btn.classList.add("btn-outline");
     btn.classList.remove("btn-primary");
@@ -72,14 +93,12 @@ const btns = document.querySelectorAll("#btnDiv button");
 };
 
 allBtn.addEventListener("click", () => {
-    const allBtn = document.getElementById("allBtn");
   setActive(allBtn);
   displayCount(allIssues);
   displayIssues(allIssues);
 });
 
 openBtn.addEventListener("click", () => {
-    const openBtn = document.getElementById("openBtn");
   setActive(openBtn);
   const openIssues = allIssues.filter((issue) => issue.status === "open");
   displayCount(openIssues);
@@ -87,7 +106,6 @@ openBtn.addEventListener("click", () => {
 });
 
 closedBtn.addEventListener("click", () => {
-   const closedBtn = document.getElementById("closedBtn");
   setActive(closedBtn);
   const closedIssues = allIssues.filter((issue) => issue.status === "closed");
   displayCount(closedIssues);
@@ -95,11 +113,11 @@ closedBtn.addEventListener("click", () => {
 });
 
 const displayIssues = (issues) => {
+
   cardContainer.innerHTML = "";
+   cardContainer.classList.add("grid");
+
   issues.forEach((issue) => {
-    // const title = document.getElementById("title");
-    // const status = document.getElementById("status");
-    const label = document.getElementById("labels");
     const color =
       issue.priority === "high"
         ? "bg-[#FEECEC] text-[#EF4444]"
@@ -112,7 +130,7 @@ const displayIssues = (issues) => {
         <div onclick="openIssueModal(${issue.id})" class="">
           <div class="space-y-3 p-4">
             <div class="flex justify-between">
-              <img src="assets/Open-Status.png" alt="" />
+              <img src="./assets/Open-Status.png" alt="" />
               <div class="${color} w-20 h-6 text-center rounded-2xl">
                 <h1 class="">${issue.priority.toUpperCase()}</h1>
               </div>
@@ -140,9 +158,10 @@ const displayIssues = (issues) => {
           </div>
         </div>
     `;
-    manageSpinner(false);
+
     cardContainer.appendChild(card);
   });
+   manageSpinner(false);
 };
 loadIssues();
 const loadIssueDetails = async (id) => {
@@ -153,14 +172,18 @@ const loadIssueDetails = async (id) => {
 };
 
 async function openIssueModal(id) {
-    const issueModal = document.getElementById("issueModal");
   manageSpinner(true);
   const url = `https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`;
   const res = await fetch(url);
   const details = await res.json();
   const issueDetails = details.data;
-  const status = document.getElementById("status");
-  const title = document.getElementById("title");
+
+    const issueModal = document.getElementById("issueModal");
+    const title = document.getElementById("title");
+    const status = document.getElementById("status");
+    const label = document.getElementById("labels");
+    const description = document.getElementById("description");
+  
   title.textContent = issueDetails.title;
   status.textContent = issueDetails.status === "open" ? "Opened" : "Closed";
   status.style.backgroundColor =
@@ -171,16 +194,10 @@ async function openIssueModal(id) {
               >
                 ${createElements(issueDetails.labels)}
                 </div>`;
-   
-const description = document.getElementById("description");
-const assignee = document.getElementById("assignee");
-const priority = document.getElementById("priority");
-const author = document.getElementById("author");
-const date = document.getElementById("date");
   description.textContent = issueDetails.description;
   assignee.textContent = issueDetails.assignee;
   author.textContent = issueDetails.author;
-  //   date.textContent = issueDetails.createdAt.toLocaleDateString("en-GB");
+  
   date.textContent = new Date(issueDetails.createdAt).toLocaleDateString(
     "en-GB",
   );
@@ -202,16 +219,13 @@ searchBtn.addEventListener("click", async () => {
   const searchValue = searchInput.value.trim().toLowerCase();
 
   manageSpinner(true);
-
   const res = await fetch(
     `https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${searchValue}`,
   );
   const data = await res.json();
-
   const issues = data.data;
 
   if (issues.length === 0) {
-    const cardContainer = document.getElementById("cardContainer");
     cardContainer.classList.remove("grid");
     cardContainer.innerHTML = `
             <div class="grid grid-cols-1 text-center">
@@ -219,6 +233,7 @@ searchBtn.addEventListener("click", async () => {
             </div>
         `;
     displayCount(issues);
+    
   } else {
     displayIssues(issues);
     displayCount(issues);
@@ -232,7 +247,6 @@ searchBtn.addEventListener("click", async () => {
 });
 
 const displayCount = (issues) => {
-    const totalCount = document.getElementById("totalCount");
   totalCount.innerHTML = `
         <h1 class="text-xl font-semibold">${issues.length} Issues</h1>
   `;
