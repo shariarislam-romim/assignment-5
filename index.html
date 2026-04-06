@@ -3,9 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- daisyUI -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- google font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap"
+      rel="stylesheet"/>
+
+       <!-- css -->
+    <link rel="stylesheet" href="style.css" />
+    <link rel="shortcut icon" href="assets/github-logo.png" type="image/x-icon">
+
     <title>Github Issues Tracker</title>
 </head>
-<body>
-    
+<body class="bg-[#F8FAFC] flex items-center justify-center content-center">
+
+    <div class="mx-auto max-w-[520px] border bg-white rounded-lg shadow-xl border-white p-8 flex flex-col justify-center items-center space-y-4">
+        <img src="./assets/github-logo.png" alt="">
+        <div class="text-center">
+            <h1 class="font-semibold text-2xl text-[#1F2937]"> GitHub Issues Tracker</h1>
+            <p class="text-[#64748B]">Sign in to manage your issues</p>
+        </div>
+
+        <div class="space-y-4">
+           <div class="space-y-4">
+            <div>
+                <label for="">Username</label><br>
+                <input type="text" id="username" placeholder="Enter username" class="input sm:w-[456px]" required>
+                <p class="text-[#4A00FF]">Default: admin</p>
+            </div>
+
+            <div>
+                <label for="">Password</label><br>
+                <input type="password" name="" id="password" class="input sm:w-[456px]" placeholder="Enter Password" required>
+                 <p class="text-[#4A00FF]">Default: admin123</p>
+            </div>
+
+            <button id="loginBtn" class="btn btn-neutral border-0 bg-[#4A00FF] w-full">Sign In</button>
+           </div> 
+        
+
+        <div class="flex items-center px-4">
+          <hr class="grow border-[#E4E4E7]"/>
+          <span class="mx-2 text-gray-500">OR</span>
+          <hr class="grow border-[#E4E4E7]"/>
+        </div>
+
+        <div>
+            <p class="text-[#64748B] text-sm">Demo Credentials:</p>
+            <div>
+               <h1>
+              <span class="font-semibold">Username: </span> admin <br/><span class="font-semibold">Password:<span>admin123
+            </h1> 
+            </div>
+        </div>
+    </div>
+ </div>  
+ 
+ 
+ <script src="./index.js"></script>
 </body>
 </html>
