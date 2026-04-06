@@ -113,7 +113,6 @@ closedBtn.addEventListener("click", () => {
 });
 
 const displayIssues = (issues) => {
-
   cardContainer.innerHTML = "";
    cardContainer.classList.add("grid");
 
